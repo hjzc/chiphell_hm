@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "lib_name",
+      "value": "dialog"
+    },
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "dialog_tip",
+      "value": "提示"
+    },
+    {
+      "name": "btn_sure",
+      "value": "确定"
+    },
+    {
+      "name": "btn_cancel",
+      "value": "取消"
+    }
+  ]
+}

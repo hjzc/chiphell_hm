@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "lib_name",
+      "value": "dialog"
+    },
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "dialog_tip",
+      "value": "Prompt"
+    },
+    {
+      "name": "btn_sure",
+      "value": "Confirm"
+    },
+    {
+      "name": "btn_cancel",
+      "value": "Cancel"
+    }
+  ]
+}
