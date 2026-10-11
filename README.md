@@ -1,49 +1,6 @@
 # chiphell_hm
 
-鸿蒙6.0
-
-2. 依赖下载失败
-# 配置ohpm镜像源
-ohpm config set registry https://repo.harmonyos.com/ohpm/
-
-3. HAP文件过大
-## 1. 压缩资源图片
-## 2. 启用混淆和压缩
-## 在build-profile.json5中添加：
-'''code
-"optimize": {
-"proguard": true,
-"removeUnusedResource": true
-}
-'''
-
-四、HAP和APP Pack
-1. HAP文件结构
-   text
-
-entry-default-signed.hap
-├── ets/
-├── resources/
-├── module.json
-├── pack.info
-└── signature
-
-2. 生成APP Pack（应用商店发布）
-   bash
-
-# 1. 准备多个HAP（如手机、平板、车机版）
-# 2. 创建app_pack目录结构
-app_pack/
-├── 手机HAP文件
-├── 平板HAP文件
-├── pack.info
-└── 签名文件
-
-# 3. 使用命令行工具打包
-java -jar app_packing_tool.jar --mode multi-hap \
---json-path config.json --profile-path signature.p7b \
---in-path ./app_pack --out-path ./output/apppack.app
-
+Chiphell 论坛,鸿蒙系统（6.0起）客户端。
 
 ## 已知问题
 图片下载被拦截，可能https证书问题
