@@ -1,0 +1,264 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Chiphell"
+    },
+    {
+      "name": "apply_for_network",
+      "value": "允许应用使用网络"
+    },
+    {
+      "name": "distributed_data_sync",
+      "value": "允许不同设备间的数据互换"
+    },
+    {
+      "name": "apply_for_bundle_info",
+      "value": "允许读取应用信息"
+    },
+    {
+      "name": "permission_CAMERA",
+      "value": "用于应用使用相机"
+    },
+    {
+      "name": "permission_WRITE_IMAGEVIDEO",
+      "value": "用于应用读写公共目录的图片或视频文件"
+    },
+    {
+      "name": "follow_system_settings_switch_mode",
+      "value": "跟随系统设置开启后根据系统设置同步切换深/浅模式"
+    },
+    {
+      "name": "follow_system_settings",
+      "value": "跟随系统设置"
+    },
+    {
+      "name": "page_filters_title",
+      "value": "过滤管理"
+    },
+    {
+      "name": "page_record_title",
+      "value": "浏览管理"
+    },
+    {
+      "name": "dark_mode",
+      "value": "深色"
+    },
+    {
+      "name": "light_mode",
+      "value": "浅色"
+    },
+    {
+      "name": "theme_mode_set",
+      "value": "主题设置"
+    },
+    {
+      "name": "app_settings",
+      "value": "设置"
+    },
+    {
+      "name": "tips",
+      "value": "提示"
+    },
+    {
+      "name": "fail",
+      "value": "链接打开失败"
+    },
+    {
+      "name": "confirm",
+      "value": "确定"
+    },
+    {
+      "name": "download",
+      "value": "应用未下载前去应用市场"
+    },
+    {
+      "name": "copy_link",
+      "value": "拷贝链接"
+    },
+    {
+      "name": "copy_title",
+      "value": "拷贝标题"
+    },
+    {
+      "name": "copy_success",
+      "value": "拷贝成功"
+    },
+    {
+      "name": "copy_failed",
+      "value": "拷贝失败"
+    },
+    {
+      "name": "onConfirm",
+      "value": "允许"
+    },
+    {
+      "name": "onDeny",
+      "value": "拒绝"
+    },
+    {
+      "name": "web_permission_message",
+      "value": "操作需要获得相应的权限"
+    },
+    {
+      "name": "page_settings_clean_cache_check_tips",
+      "value": "是否全部清除？"
+    },
+    {
+      "name": "page_settings_clean_cache_check_content",
+      "value": "确定清除应用缓存文件吗？"
+    },
+    {
+      "name": "do_success",
+      "value": "成功！"
+    },
+    {
+      "name": "do_failed",
+      "value": "失败！"
+    },
+    {
+      "name": "do_already_exist",
+      "value": "已经存在!"
+    },
+    {
+      "name": "no_more_data",
+      "value": "没有更多数据了"
+    },
+    {
+      "name": "more_data",
+      "value": "更多数据"
+    },
+    {
+      "name": "data_loading",
+      "value": "加载中"
+    },
+    {
+      "name": "clean_cache",
+      "value": "清除缓存"
+    },
+    {
+      "name": "theme",
+      "value": "外观"
+    },
+    {
+      "name": "theme_font_size",
+      "value": "字体大小"
+    },
+    {
+      "name": "web_record",
+      "value": "历史"
+    },
+    {
+      "name": "web_replay_user_filter",
+      "value": "过滤"
+    },
+    {
+      "name": "web_ua_pc",
+      "value": "桌面"
+    },
+    {
+      "name": "web_ua_mobile",
+      "value": "移动"
+    },
+    {
+      "name": "web_font_set_alert_desc",
+      "value": "选择文本大小"
+    },
+    {
+      "name": "web_font_set_option_normal",
+      "value":  "标准"
+    },
+    {
+      "name": "web_font_set_option_mid",
+      "value": "中等"
+    },
+    {
+      "name": "web_font_set_option_big",
+      "value": "大"
+    },
+    {
+      "name": "web_record_tab1",
+      "value": "收藏"
+    },
+    {
+      "name": "web_record_tab2",
+      "value": "历史"
+    },
+    {
+      "name": "pop_menu_login",
+      "value": "登陆"
+    },
+    {
+      "name": "pop_menu_browse",
+      "value": "浏览"
+    },
+    {
+      "name": "pop_menu_copy",
+      "value": "拷贝"
+    },
+    {
+      "name": "pop_menu_forum",
+      "value": "板块"
+    },
+    {
+      "name": "pop_menu_gallery",
+      "value": "画廊"
+    },
+    {
+      "name": "sheet_record_open",
+      "value": "打开"
+    },
+    {
+      "name": "set_terms_of_service",
+      "value": "服务协议"
+    },
+    {
+      "name": "set_policies_user_agreement",
+      "value": "用户协议"
+    },
+    {
+      "name": "set_privacy_policy",
+      "value": "隐私政策"
+    },
+    {
+      "name": "set_user_info_policy",
+      "value": "个人信息收集清单"
+    },
+    {
+      "name": "set_privacy_policy_check_tip",
+      "value": "请查看和确认隐私策略。"
+    },
+    {
+      "name": "set_privacy_policy_check_content",
+      "value": "确认前，请务必仔细查看条款内容。"
+    },
+    {
+      "name": "set_privacy_policy_check_ok",
+      "value": "您是否同意隐私策略？"
+    },
+    {
+      "name": "web_set_image_mode",
+      "value": "图片模式"
+    },
+    {
+      "name": "web_set_image_mode_no_image",
+      "value": "无图"
+    },
+    {
+      "name": "search",
+      "value": "搜索"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "请输入搜索内容"
+    }
+  ]
+}

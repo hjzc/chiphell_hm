@@ -5,7 +5,7 @@ import { BaseDialogOptions } from './base/BaseDialogOptions';
 
 /**
  * TODO 加载框，参数类
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/18
  */
 export interface LoadingOptions extends BaseDialogOptions {

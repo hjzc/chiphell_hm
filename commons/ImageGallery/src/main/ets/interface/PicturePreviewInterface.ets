@@ -1,4 +1,4 @@
-import map from "@hms.core.map.map";
+import { ImgDownloadCallBack } from "./ImgDownloadCallBack";
 
 /**
  * 图片预览器的参数
@@ -29,6 +29,7 @@ export interface PicturePreviewData{
    */
   listener?: PicturePreviewListener;
 
+  downloadIntercept?: PictureDownloadIntercept;
 
 }
 
@@ -69,6 +70,10 @@ export interface FunctionData {
    */
   backIcon?: ResourceStr;
   /**
+   * 保存图标
+   */
+  saveIcon?: ResourceStr;
+  /**
    * 关闭长按保存功能 默认为true 开启后长按会触发保存相册弹窗
    */
   saveAlbum?: boolean;
@@ -88,6 +93,14 @@ export interface FunctionData {
    * 返回按钮是否显示
    */
   isBack?: boolean;
+  /**
+   * 保存按钮
+   */
+  isNavSave?: boolean;
+  /**
+   * 是否动态显示NavSave按钮,true 为图片有效时显示
+   */
+  isDynamicNavSave?:boolean;
 }
 
 /**
@@ -185,4 +198,13 @@ export interface PicturePreviewListener {
    * @returns 是否拦截点击事件
    */
   onClick?: (index: number, iconData: IconData) => boolean | void;
+}
+
+
+/**
+ * 缓存拦截
+ */
+export interface PictureDownloadIntercept {
+  isDownloadIntercept: (url: string)=>boolean;
+  downloadPathByUrl:(filePath: string, url: string,downloadCallBack:ImgDownloadCallBack|undefined )=>void;
 }

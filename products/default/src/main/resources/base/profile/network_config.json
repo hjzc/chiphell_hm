@@ -1,0 +1,22 @@
+{
+  "network-security-config": {
+    "base-config": {
+      "trust-anchors": [
+        {
+          "certificates": "/data/storage/el1/bundle/default/resources/resfile/appCaCert"
+        }
+      ],
+      "cleartext-traffic-permitted":true
+    },
+    "domain-config": [
+      {
+        "domains": [{"name": "www.chiphell.com", "include-subdomains": true}],
+        "trust-anchors": [
+          {
+            "certificates": "/data/storage/el1/bundle/default/resources/resfile/domainCaCert"
+          }
+        ]
+      }
+    ]
+  }
+}

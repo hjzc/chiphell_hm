@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/harmony-utils
+ * Copyright (C) 2024 Zorro @pura/harmony-utils
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +18,7 @@ import { util } from '@kit.ArkTS';
 
 /**
  * TODO LRUCache缓存工具类
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/05/01
  */
 export class CacheHelper {

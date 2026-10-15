@@ -9,7 +9,10 @@ export {
   FunctionData,
   StyleData,
   ToolBuild,
+  PictureDownloadIntercept,
+
 } from './src/main/ets/interface/PicturePreviewInterface'
 export { AllFilesInterface } from './src/main/ets/interface/AllFilesInterface'
 export { FileType } from './src/main/ets/enums/FileType'
 export { ResourceType } from './src/main/ets/enums/ResourceType'
+export { ImgDownloadCallBack,ImgDownloadParam } from './src/main/ets/interface/ImgDownloadCallBack'

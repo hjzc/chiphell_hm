@@ -6,11 +6,13 @@ import { PicturePreview } from '../PicturePreview';
 import { Loading } from './Loading';
 import { PicturePreviewDataModel } from '../model/PicturePreviewDataModel';
 import { common } from '@kit.AbilityKit';
-import { ImgDownloadCallBack } from '../interface/ImgDownloader';
+import { ImgDownloadCallBack } from '../interface/ImgDownloadCallBack';
 
 @Component
 export struct Images{
   @Link index: number;
+  @Link imageValid: boolean;
+
   @State styleData: StyleData = PicturePreviewDataModel.getInstance().styleData;
   @Prop iconDatas: MyDataSource<IconData>;
   @State isDisableSwipe: boolean = false
@@ -46,6 +48,7 @@ export struct Images{
       LazyForEach(this.iconDatas, (item: IconData)=>{
         ImageIte({
           item: item,
+          imageValid:this.imageValid,
           isDisableSwipe: this.isDisableSwipe,
           maxScale: this.styleData.maxScale,
           isZoom: this.styleData.isZoom,
@@ -88,6 +91,7 @@ export struct Images{
 @Component
 struct ImageIte{
   @Prop item: IconData
+  @Link imageValid: boolean;
   @Link isDisableSwipe: boolean;
   @Prop isZoom: boolean
   @Prop maxScale: number = 5;
@@ -107,6 +111,7 @@ struct ImageIte{
   doubleClick: () => boolean = ()=>{
     return false
   }
+
   // 图片地址
   @State path: ResourceStr = $r('app.media.photo_gallery_image_loading')
   private pictureCacheUtil: PictureCacheUtil = new PictureCacheUtil( this.getUIContext().getHostContext() as common.UIAbilityContext);//; getContext());
@@ -114,12 +119,14 @@ struct ImageIte{
     this.downloadCallBack.url = this.item.url;
     this.downloadCallBack.filePath = this.item.path;
     this.downloadCallBack.onStart = (url:string)=>{
-        this.bgDownloading  = true;
+      this.bgDownloading  = true;
+      this.imageValid = false;
     };
     this.downloadCallBack.onFinished = (url:string,path:string,error:boolean)=>{
       if(error)
       {
         this.isError = error;
+        this.imageValid=false;
       }else{
         ///file://com.redpig.chiphell/data/storage/el2/base/haps/default/files/MediaLibrary_Image/161804tpkkue1ef4tc1eth.jpg
         ///data/storage/el2/base/haps/default/files/MediaLibrary_Image/161806d99m1l0pmcfpimpa.jpg
@@ -127,6 +134,7 @@ struct ImageIte{
         if(this.item.path === undefined || this.item.path.length == 0){
           this.item.path = path;
         }
+        this.imageValid=true;
       }
       this.bgDownloading  = false;
     };
@@ -144,7 +152,12 @@ struct ImageIte{
         if( (this.path !== undefined ) && (this.path as string) && (this.path.length>0) && this.path.startsWith('file',0) )
         {
           this.item.path = this.path;
+          this.imageValid=true;
+        }else{
+          this.imageValid=false;
         }
+      }else {
+        this.imageValid=true;
       }
       this.bgDownloading = false;
     }

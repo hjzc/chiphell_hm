@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/harmony-dialog
+ * Copyright (C) 2024 Zorro @pura/harmony-dialog
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +19,7 @@ import { ActionCallBack } from '../../utils/constraint';
 
 /**
  * TODO 确认弹出框，Base参数类
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/18
  */
 export interface HmDialogOptions extends DialogOptions {

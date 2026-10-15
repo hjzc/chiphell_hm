@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/harmony-dialog
+ * Copyright (C) 2024 Zorro @pura/harmony-dialog
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,7 +24,7 @@ import { display } from '@kit.ArkUI';
 
 /**
  * TODO TextPickerDialog组件
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/01
  */
 @Preview

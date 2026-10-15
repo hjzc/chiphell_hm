@@ -45,6 +45,8 @@ export class PicturePreview {
       maskColor: "#00ffffff",
       transition: transition
     })
+
+    //PictureCacheUtil.cacheIntercept = picturePreviewData.cacheIntercept;
     return contentNode;
   }
 

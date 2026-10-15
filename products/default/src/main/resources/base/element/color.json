@@ -1,0 +1,63 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },{
+      "name": "background_color",
+      "value": "#F1F3F5"
+    },
+    {
+      "name": "grey",
+      "value": "#E5E8EA"
+    },
+    {
+      "name": "placeholder_color",
+      "value": "#787F87"
+    },
+    {
+      "name": "font_red",
+      "value": "#E02020"
+    },
+    {
+      "name": "tab_selected_background_color",
+      "value": "#E84026"
+    },
+    {
+      "name": "tab_background_color",
+      "value": "#F1F3F5"
+    },
+    {
+      "name": "search_background_color",
+      "value": "#E6E8E9"
+    },
+    {
+      "name": "search_border_color",
+      "value": "#E6E8E9"
+    },
+    {
+      "name": "search_placeholder_color",
+      "value": "#949292"
+    },
+    {
+      "name": "one_font_color",
+      "value": "#F62323"
+    },
+    {
+      "name": "two_font_color",
+      "value": "#EE6F20"
+    },
+    {
+      "name": "three_font_color",
+      "value": "#FFCE00"
+    },
+    {
+      "name": "history_font_color",
+      "value": "#484949"
+    },
+    {
+      "name": "line_color",
+      "value": "#F1F3F5"
+    }
+  ]
+}

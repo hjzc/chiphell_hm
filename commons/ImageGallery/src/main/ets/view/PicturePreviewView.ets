@@ -18,12 +18,16 @@ export function PicturePreviewView(picturePreviewData: PicturePreviewData){
 @Component
 struct PicturePreviewItem{
   @Prop picturePreviewData: MyDataSource<IconData>;
+  //index 变化，执行getData函数
   @Prop @Watch("getData") index: number = 0;
+  @Prop @Watch("getDataValid")  imageValid: boolean=false;
+
   @Prop functionData: FunctionData = PicturePreviewDataModel.getInstance().functionData;
   @Prop styleData: StyleData = PicturePreviewDataModel.getInstance().styleData;
   @Prop toolBuild: ToolBuild = PicturePreviewDataModel.getInstance().toolBuild;
   @State saveIs: boolean = false;
   @State theIconData: IconData = this.picturePreviewData.getData(this.index);
+  @Prop ableSave: boolean;
 
   aboutToAppear(): void {
     // 没什么用，单纯编辑器好看
@@ -32,6 +36,11 @@ struct PicturePreviewItem{
 
   private getData(){
     this.theIconData = this.picturePreviewData.getData(this.index)
+    this.imageValid = this.theIconData.path!=undefined;
+  }
+
+  private getDataValid(){
+    this.ableSave = this.imageValid;
   }
 
   build() {
@@ -39,6 +48,7 @@ struct PicturePreviewItem{
       // 图片展示区域
       Images({
         index: this.index,
+        imageValid:this.imageValid,
         iconDatas: this.picturePreviewData,
         loading: this.toolBuild.loading,
       })
@@ -46,11 +56,19 @@ struct PicturePreviewItem{
       if (this.functionData.indicator){
         Head({
           index: this.index,
+          ableSave:this.ableSave,
           iconSum: this.picturePreviewData.totalCount(),
           backIcon: this.functionData.backIcon,
           onBack: ()=>{
             PicturePreview.close()
+          },
+          onSave:()=>{
+            // 打开保存到相册弹框
+            if (this.functionData.saveAlbum) {
+              this.saveIs = true;
+            }
           }
+
         })
       }
       if (this.toolBuild.tools) {
@@ -75,7 +93,6 @@ struct PicturePreviewItem{
           let fn = PicturePreviewDataModel.getInstance().listener.onLongPress!;
           let is = fn(this.index, this.picturePreviewData.getData(this.index))
           if (is) return;
-
           // 打开保存到相册弹框
           if (this.functionData.saveAlbum) {
             this.saveIs = true;

@@ -5,9 +5,10 @@ import { Context } from '@ohos.arkui.UIContext';
 import { AllFilesInterface, FileType, ResourceType } from '../../../../Index';
 import { FilePath } from '../model/FilePath';
 import { ImgDownloadManager } from '../interface/ImgDownloadManager';
-import { ImgDownloadCallBack } from '../interface/ImgDownloader';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { PicturePreviewDataModel } from '../model/PicturePreviewDataModel';
+import { ImgDownloadCallBack } from '../interface/ImgDownloadCallBack';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 export class PictureCacheUtil{
   private context: Context
@@ -15,7 +16,6 @@ export class PictureCacheUtil{
     this.context = context;
   }
   static defaultUA : string  = 'Mozilla/5.0 (Phone; OpenHarmony 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36  ArkWeb/6.0.0.47 Mobile';
-
 
   /**
    * 根据传入的网络地址或者本地地址选择使用哪个地址
@@ -97,21 +97,6 @@ export class PictureCacheUtil{
      filePath = PictureCacheUtil.getFilePath(context, fileName);
    }
 
-    // // 如果是本地地址则返回本地地址
-    // if (pathOrName) {
-    //   if (pathOrName.includes("file://")) {
-    //     return pathOrName;
-    //   }
-    //   if (fs.accessSync(pathOrName)) {
-    //     return fileUri.getUriFromPath(pathOrName)
-    //   }
-    // }
-    // let fileName = PictureCacheUtil.getFileName(pathOrName, url, suffix)
-    // let filePath = PictureCacheUtil.getFilePath(context, fileName);
-
-
-
-
     // 校验并创建目录
     const regex = new RegExp("/"+fileName, 'g'); // 创建一个全局正则表达式
     let file = filePath.replace(regex, ''); // 替换所有匹配的子字符串为空字符串
@@ -166,6 +151,7 @@ export class PictureCacheUtil{
       return url ? url : '';
     }
   }
+
   /**
    * 删除沙箱路径中的文件
    * @param filePath 沙箱路径
@@ -196,184 +182,23 @@ export class PictureCacheUtil{
       fs.rmdirSync(filesDir + "/" + FilePath.File)
     } catch (e) {}
   }
+
   /**
    * 传入沙箱目录和网络地址
    * 将文件下载到沙箱目录中
    * @param filePath 沙箱目录
    * @param url 网络地址
    */
-  static  downloadPathByUrl(filePath: string, url: string,downloadCallBack:ImgDownloadCallBack|undefined = undefined ):void  {
-
-    return ImgDownloadManager.getInstance().downloadPathByUrl(filePath,url,downloadCallBack);
-
-    //
-    //
-    // let ua =  PicturePreviewDataModel.getInstance().requestUserAgent;
-    // if (ua==null) {
-    //     ua =AppStorage.get('useragent') as string;
-    // }
-    // if(ua === undefined ||ua===null){
-    //   ua = PictureCacheUtil.defaultUA;
-    // }
-    //
-    // let host =  PicturePreviewDataModel.getInstance().requestHost;;
-    // let rf:string|null = PicturePreviewDataModel.getInstance().requestReferer;
-    // if (rf==null) {
-    //   rf =AppStorage.get('referer') as string;
-    // }
-    //
-    // if(host==null || rf===null || rf === undefined){
-    //   const regex = new RegExp("^(https?:\\/\\/[a-zA-Z0-9-|.]+[a-zA-Z]{2,6})"); // 创建一个全局正则表达式
-    //   let res :RegExpMatchArray|null =  url.match(regex);
-    //   if(res != null && res.length >0){
-    //     let baseUrl =res[0];
-    //     if (host==null) {
-    //       host = baseUrl;
-    //       if (host.startsWith('https://',0)) {
-    //         host = host.replace('https://','');
-    //       }else if (host.startsWith('http://',0)) {
-    //         host = host.replace('http://','');
-    //       }
-    //     }
-    //     if (rf==null) {
-    //       rf = baseUrl;
-    //     }
-    //     //https://static.chiphell.com/
-    //     if (rf.startsWith('https://static.',0)) {
-    //        rf = rf.replace('https://static.','https://www.');
-    //     }else if (rf.startsWith('http://static.',0)) {
-    //       rf = rf.replace('http://static.','http://www.');
-    //     }
-    //   }
-    // }
-    //
-    // if(downloadCallBack !== undefined){
-    //   downloadCallBack.filePath = filePath;
-    //   if(downloadCallBack.onStart !== undefined){
-    //     downloadCallBack.onStart(url);
-    //   }
-    // }
-    // // 'Accept':'image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5',
-    // // 'Accept-Encoding':'gzip, deflate, br, zstd',
-    // // 'Accept-Language':'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
-    // // 'Referer':rf??'https://www.chiphell.com',
-    // // 'Host':host??'www.chiphell.com',
-    // // 'User-Agent':ua
-    //
-    // // let options: http.HttpRequestOptions = {
-    // //   method: http.RequestMethod.GET, // 可选，默认为http.RequestMethod.GET
-    // //   // 当使用POST请求时此字段用于传递请求体内容，具体格式与服务端协商确定
-    // // //  extraData: 'data to send',
-    // //   //expectDataType: http.HttpDataType.STRING, // 可选，指定返回数据的类型
-    // //   usingCache: true, // 可选，默认为true
-    // //   priority: 1, // 可选，默认为1
-    // //   // 开发者根据自身业务需要添加header字段
-    // //   header: {
-    // //     'Referer':rf??'https://www.chiphell.com',
-    // //     'User-Agent':ua
-    // //   },
-    // //   readTimeout: 60000, // 可选，默认为60000ms
-    // //   connectTimeout: 60000, // 可选，默认为60000ms
-    // //   usingProtocol: http.HttpProtocol.HTTP1_1, // 可选，协议类型默认值由系统自动指定
-    // //   usingProxy: false, // 可选，默认不使用网络代理，自API 10开始支持该属性
-    // //   maxLimit: 100 * 1024 * 1024,
-    // // };
-    //
-    // let httpRequest = http.createHttp();
-    // httpRequest.request(url,{
-    //     method: http.RequestMethod.GET,
-    //     connectTimeout: 60000,
-    //     readTimeout: 60000,
-    //     maxLimit: 100 * 1024 * 1024,
-    //     usingCache:true,
-    //     header: {
-    //       'Referer':rf??'https://www.chiphell.com',
-    //       'User-Agent':ua
-    //     },
-    //     usingProtocol: http.HttpProtocol.HTTP1_1,
-    //   },
-    //   async (err, data)=>
-    //   {
-    //     let ss = false;
-    //     if (err) {
-    //       console.log("CHIP_HELL ThumbnailPictureModel", "downloadPathByUrl Error: " + JSON.stringify(err))
-    //       let httpError:BusinessError = err as BusinessError;
-    //       if(httpError.code == 2300023){
-    //         console.log("CHIP_HELL ThumbnailPictureModel", "downloadPathByUrl error 2300023 " + filePath)
-    //         //目录不可以写。或者上次还在下载中，或者文件超过了5MB，要改为http.requestInstream 下载
-    //         // // 创建请求对象
-    //         // import http from '@ohos.net.http';
-    //         // let request = http.createHttp();
-    //         // // 启用流式传输
-    //         // request.requestInStream(url,
-    //         //   {
-    //         //     connectTimeout: 60000,
-    //         //     readTimeout: 60000,
-    //         //     maxLimit: 100 * 1024 * 1024,
-    //         //     header: {
-    //         //       'Accept':'image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5',
-    //         //       'Referer':rf??'https://www.chiphell.com',
-    //         //       'User-Agent':ua
-    //         //     }
-    //         //   },
-    //         //   (err1, response) =>
-    //         //   {
-    //         //     if (err1)
-    //         //     {
-    //         //       /* 错误处理 */
-    //         //     }
-    //         //     else {
-    //         //       // 分块处理数据
-    //         //       // let writer = ... // 创建文件写入流
-    //         //       let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-    //         //       response.on('data', (chunk: ArrayBuffer) => {
-    //         //         fs.write(file.fd, chunk); // 逐块写入
-    //         //       });
-    //         //       response.on('end', () => {
-    //         //         fs.close(file.fd);
-    //         //       });
-    //         //     }
-    //         //   }
-    //         // );
-    //         ss = true;
-    //       }else{
-    //         ss = true;
-    //       }
-    //     }
-    //     else{
-    //       if( data.resultType== 2){
-    //         console.log('CHIP_HELL data. resultType other 无效格式');
-    //         // 获取到图片流
-    //         let imageBuffer = data.result as ArrayBuffer;
-    //         // 打开并创建文件目录
-    //         let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-    //         fs.write(file.fd, imageBuffer);
-    //         console.log("CHIP_HELL ThumbnailPictureModel", "downloadPathByUrl 文件保存成功 " + filePath)
-    //         fs.close(file.fd);
-    //       }else{
-    //
-    //         if(data.resultType == 1) {
-    //           console.log('CHIP_HELL data. resultType 1 object 无效格式');
-    //         }else if(data.resultType == 0) {
-    //           console.log('CHIP_HELL data. resultType 0 string 无效格式');
-    //         }else {
-    //           console.log(`CHIP_HELL data. resultType ${data.resultType} other 无效格式`);
-    //         }
-    //       }
-    //     }
-    //
-    //     if(downloadCallBack !== undefined){
-    //       if(downloadCallBack.onFinished !== undefined ){
-    //         downloadCallBack.onFinished(url,fileUri.getUriFromPath(filePath),ss);
-    //       }
-    //     }
-    //
-    //     httpRequest.destroy();
-    //
-    // });
-    // return;
-
+  private static downloadPathByUrl(filePath: string, url: string,downloadCallBack:ImgDownloadCallBack|undefined = undefined ):void  {
+    //拦截器
+    let vv = PicturePreviewDataModel.getInstance().downloadIntercept;
+    if(vv && vv?.isDownloadIntercept(url)){
+      vv.downloadPathByUrl(filePath,url,downloadCallBack);
+    }else{
+      ImgDownloadManager.getInstance().downloadPathByUrl(filePath,url,downloadCallBack);
+    }
   }
+
   /**
    * 根据文件路径或文件名称 或者 url 获取缓存文件名称
    * 只是获取文件路径，文件无法确保存在
@@ -642,5 +467,50 @@ export class PictureCacheUtil{
       return true;
     }
     return false;
+  }
+
+  static  async isImageByContent(filePath: string): Promise<boolean> {
+    let r:boolean = false;
+    try {
+      let file = await fs.open(filePath, fs.OpenMode.READ_ONLY);
+      let buffer = new ArrayBuffer(8); // 读取前8字节
+      await fs.read(file.fd, buffer);
+      const view = new Uint8Array(buffer);
+      await fs.close(file.fd);
+      if(view[0] == 0xFF && view[1] == 0xD8 ){
+        r= true;
+      }else if(view[0] == 0x47  && view[1] == 0x49  && view[2] == 0x46  ){
+        r= true;
+      }else if(view[0] == 0x89 && view[1] == 0x50 && view[2] == 0x4E && view[3] == 0x47 ){
+        r= true;
+      }
+      return r;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static  writeBufferToFile(filePath:string|undefined, buffer :ArrayBuffer):boolean {
+    let r:boolean  =false;
+    if(filePath) {
+      try {
+        // 打开并创建文件目录
+        let we: boolean = true;
+        let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+        fs.write(file.fd, buffer).catch(() => {
+          // TODO: Implement error handling.
+          we = false;
+        });
+        fs.close(file.fd).catch(() => {
+          // TODO: Implement error handling.
+          we = false;
+        });
+        r = we;
+      } catch (e) {
+        let err: BusinessError = e as BusinessError;
+        hilog.info(0x0000, 'CHIP_HELL', `writeBufferToFile error code: ${err.code}, message:${err.message}`);
+      }
+    }
+    return r;
   }
 }

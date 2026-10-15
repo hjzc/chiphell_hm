@@ -1,0 +1,140 @@
+{
+  "integer": [
+    {
+      "name": "font_size_18",
+      "value": 18
+    },
+    {
+      "name": "font_size_16",
+      "value": 16
+    },
+    {
+      "name": "font_size_14",
+      "value": 14
+    },
+    {
+      "name": "font_size_12",
+      "value": 12
+    },
+    {
+      "name": "content_height",
+      "value": 56
+    },
+    {
+      "name": "height_forty",
+      "value": 40
+    },
+    {
+      "name": "height_twenty",
+      "value": 20
+    },
+    {
+      "name": "height_sixteen",
+      "value": 16
+    },
+    {
+      "name": "search_button_height",
+      "value": 36
+    },
+    {
+      "name": "search_button_width",
+      "value": 67
+    },
+    {
+      "name": "width_forty",
+      "value": 40
+    },
+    {
+      "name": "width_twenty",
+      "value": 20
+    },
+    {
+      "name": "width_sixteen",
+      "value": 16
+    },
+    {
+      "name": "tab_content_height",
+      "value": 60
+    },
+    {
+      "name": "padding_sixteen",
+      "value": 16
+    },
+    {
+      "name": "font_weight",
+      "value": 400
+    },
+    {
+      "name": "search_content_padding_left",
+      "value": 35
+    },
+    {
+      "name": "search_content_padding_right",
+      "value": 66
+    },
+    {
+      "name": "padding_ten",
+      "value": 10
+    },
+    {
+      "name": "padding_two",
+      "value": 2
+    },
+    {
+      "name": "margin_four",
+      "value": 4
+    },
+    {
+      "name": "padding_five",
+      "value": 5
+    },
+    {
+      "name": "divider_line_height",
+      "value": 1
+    },
+    {
+      "name": "padding_twelve",
+      "value": 12
+    },
+    {
+      "name": "padding_nine",
+      "value": 9
+    },
+    {
+      "name": "padding_fifteen",
+      "value": 15
+    },
+    {
+      "name": "hot_head_tab_height",
+      "value": 36
+    },
+    {
+      "name": "hot_head_tab_width",
+      "value": 96
+    },
+    {
+      "name": "hot_head_tab_radius",
+      "value": 18
+    },
+    {
+      "name": "background_radius",
+      "value": 25
+    },
+    {
+      "name": "List_apace",
+      "value": 10
+    },
+    {
+      "name": "hot_search_content_radius",
+      "value": 20
+    },
+    {
+      "name": "history_content_radius",
+      "value": 30
+    },
+    {
+      "name": "history_content_margin",
+      "value": 5
+    }
+  ]
+}

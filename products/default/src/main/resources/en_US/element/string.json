@@ -1,0 +1,264 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Chiphell"
+    },
+    {
+      "name": "apply_for_network",
+      "value": "Allow the app to access the network"
+    },
+    {
+      "name": "distributed_data_sync",
+      "value": "Allow data exchange between different devices"
+    },
+    {
+      "name": "apply_for_bundle_info",
+      "value": "Allow read apply bundle info"
+    },
+    {
+      "name": "permission_CAMERA",
+      "value": "Used for applications using camera"
+    },
+    {
+      "name": "permission_WRITE_IMAGEVIDEO",
+      "value": "Images or videos used for reading and writing public directories"
+    },
+    {
+      "name": "follow_system_settings_switch_mode",
+      "value": "Follow system settings to switch between dark and light modes synchronously"
+    },
+    {
+      "name": "follow_system_settings",
+      "value": "Follow system settings"
+    },
+    {
+      "name": "page_filters_title",
+      "value": "Filter management"
+    },
+    {
+      "name": "page_record_title",
+      "value": "Browse management"
+    },
+    {
+      "name": "dark_mode",
+      "value": "Dark"
+    },
+    {
+      "name": "light_mode",
+      "value": "Light"
+    },
+    {
+      "name": "theme_mode_set",
+      "value": "Theme Settings"
+    },
+    {
+      "name": "app_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "tips",
+      "value": "Tip"
+    },
+    {
+      "name": "fail",
+      "value": "Link opening failed"
+    },
+    {
+      "name": "confirm",
+      "value": "Confirm"
+    },
+    {
+      "name": "download",
+      "value": "Go to the app market to download"
+    },
+    {
+      "name": "copy_link",
+      "value": "Copy Link"
+    },
+    {
+      "name": "copy_title",
+      "value": "Copy Title"
+    },
+    {
+      "name": "copy_success",
+      "value": "Copy Success"
+    },
+    {
+      "name": "copy_failed",
+      "value": "Copy Failed"
+    },
+    {
+      "name": "onConfirm",
+      "value": "Allow"
+    },
+    {
+      "name": "onDeny",
+      "value": "Deny"
+    },
+    {
+      "name": "web_permission_message",
+      "value": "Operation requires obtaining corresponding permissions"
+    },
+    {
+      "name": "page_settings_clean_cache_check_tips",
+      "value": "Do you want to clear everything?"
+    },
+    {
+      "name": "page_settings_clean_cache_check_content",
+      "value": "Are you sure to clear the application cache files?"
+    },
+    {
+      "name": "do_success",
+      "value": "Success"
+    },
+    {
+      "name": "do_failed",
+      "value": "Failed"
+    },
+    {
+      "name": "do_already_exist",
+      "value": "Existed"
+    },
+    {
+      "name": "no_more_data",
+      "value": "No more data"
+    },
+    {
+      "name": "more_data",
+      "value": "More data"
+    },
+    {
+      "name": "data_loading",
+      "value": "loading"
+    },
+    {
+      "name": "clean_cache",
+      "value": "Clean cache"
+    },
+    {
+      "name": "theme",
+      "value": "Theme"
+    },
+    {
+      "name": "theme_font_size",
+      "value": "Font size"
+    },
+    {
+      "name": "web_record",
+      "value": "History"
+    },
+    {
+      "name": "web_replay_user_filter",
+      "value": "Filter"
+    },
+    {
+      "name": "web_ua_pc",
+      "value": "Desktop"
+    },
+    {
+      "name": "web_ua_mobile",
+      "value": "Mobile"
+    },
+    {
+      "name": "web_font_set_alert_desc",
+      "value": "Select text size"
+    },
+    {
+      "name": "web_font_set_option_normal",
+      "value":  "Normal"
+    },
+    {
+      "name": "web_font_set_option_mid",
+      "value": "Middling"
+    },
+    {
+      "name": "web_font_set_option_big",
+      "value": "Larger"
+    },
+    {
+      "name": "web_record_tab1",
+      "value": "Favorite"
+    },
+    {
+      "name": "web_record_tab2",
+      "value": "History"
+    },
+    {
+      "name": "pop_menu_login",
+      "value": "Login"
+    },
+    {
+      "name": "pop_menu_browse",
+      "value": "Browse"
+    },
+    {
+      "name": "pop_menu_copy",
+      "value": "Copy"
+    },
+    {
+      "name": "pop_menu_forum",
+      "value": "Forum"
+    },
+    {
+      "name": "pop_menu_gallery",
+      "value": "Gallery"
+    },
+    {
+      "name": "sheet_record_open",
+      "value": "Open"
+    },
+    {
+      "name": "set_terms_of_service",
+      "value": "Terms of Service"
+    },
+    {
+      "name": "set_policies_user_agreement",
+      "value": "User Agreement"
+    },
+    {
+      "name": "set_privacy_policy",
+      "value": "Privacy Policy"
+    },
+    {
+      "name": "set_user_info_policy",
+      "value": "Personal Information Collection Checklist"
+    },
+    {
+      "name": "set_privacy_policy_check_tip",
+      "value": "Please review and confirm the privacy policy."
+    },
+    {
+      "name": "set_privacy_policy_check_content",
+      "value": "Please carefully review the terms and conditions before confirmation."
+    },
+    {
+      "name": "set_privacy_policy_check_ok",
+      "value": "Do you agree with the privacy policy?"
+    },
+    {
+      "name": "web_set_image_mode",
+      "value": "Image Mode"
+    },
+    {
+      "name": "web_set_image_mode_no_image",
+      "value": "No Image"
+    },
+    {
+      "name": "search",
+      "value": "Search"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "Please enter the search content"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 
 /**
  * TODO SpinKit动画组件
- * author: 桃花镇童长老
+ * author: Zorro
  * since: 2024/05/01
  */
 @ComponentV2

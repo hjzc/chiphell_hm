@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/harmony-dialog
+ * Copyright (C) 2024 Zorro @pura/harmony-dialog
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,7 +20,7 @@ import { BasePickerOptions } from './base/BasePickerOptions';
 
 /**
  * TODO 弹窗工具类，TextPicker参数类
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/18
  */
 export interface TextPickerOptions extends BasePickerOptions {

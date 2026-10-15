@@ -1,0 +1,128 @@
+-多设备同账号下的数据流转-
+//https://developer.huawei.com/consumer/cn/codelabsPortal/carddetails/tutorials_Next-DistributedFlow
+接着在products/default/src/main/module.json5中申请“ohos.permission.DISTRIBUTED_DATASYNC”权限，添加requestPermissions字段用于配置需要申请的权限，需要配置的字段包括：
+    name：申请的权限名称，必填，此处由于需要申请分布式数据同步的权限，所以填入“ohos.permission.DISTRIBUTED_DATASYNC”。
+    reason：申请权限的原因，在之后的向用户申请权限的弹窗中会用到，此处只能写成$string的形式，配合刚刚配置的申请原因，写为"$string:distributed_data_sync"。
+    usedScene。描述权限使用的场景和时机。场景类型如下两种：
+    - ability：ability的名称，可配置多个。此处配置为快速入门案例的ability名称，即EntryAbility。
+    - when：调用时机，可填的值有inuse（使用时需要此权限）、always（ 所有时间都需要此权限），默认值为inuse。
+
+
+Harmony OS中的装饰器
+https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V13/arkts-state-V13
+
+@State
+@State 用于定义组件内部的状态变量，是组件的私有状态。
+当 @State 修饰的变量发生变化时，会触发组件的重新渲染，以反映状态的更新。
+它的生命周期与组件绑定，组件销毁时，@State 变量也会被销毁。
+状态改变仅影响当前组件及其子组件。
+
+@Prop
+@Prop 用于父组件向子组件传递数据，它是单向的数据传递方式。
+子组件不能修改通过 @Prop 接收的数据，只能读取。
+当父组件更新 @Prop 数据时，子组件会收到更新并重新渲染。
+
+@State 和 @Prop‌：通常一起使用，其中@State用于管理组件内部状态，而@Prop用于从父组件接收数据。例如，一个下拉列表组件可能会使用@State来管理其展开/收起状态，并使用@Prop来接收其选项列表。
+
+@Link
+@Link 也用于父组件向子组件传递数据，但它是双向的数据传递。
+子组件可以修改通过 @Link 接收的数据，并且修改会反映到父组件中。
+子组件和父组件中的 @Link 变量实际上是共享同一份数据，它们的状态是同步的。
+
+@StorageProp
+装饰器用于将一个属性存储到持久化存储中，如本地存储。这对于需要保存用户设置或应用状态的功能非常有用。当组件重新创建时，这些属性可以从存储中恢复其值。
+@StorageProp‌：通常与@State结合使用，特别是在需要持久化某些状态（如用户偏好设置）时。例如，一个主题切换组件可能会使用@State来管理当前主题，并使用@StorageProp来确保主题设置在应用重启后仍然有效。
+@StorageProp('contentFontSize') contentFontSize: number = 18;
+
+@StorageLink
+双向同步：从AppStorage的对应属性到自定义组件，从自定义组件到AppStorage对应属性。
+@StorageLink('currentModelStatus') currentModelStatus: boolean = true;
+被装饰变量的初始值 	必须指定，如果AppStorage实例中不存在属性，则用该初始值初始化该属性，并存入AppStorage中。
+
+
+@Provide/@Consume
+@Provide/@Consume装饰的变量用于跨组件层级（多层组件）同步状态变量，可以不需要通过参数命名机制传递，通过alias（别名）或者属性名绑定。
+@Provide装饰的状态变量自动对其所有后代组件可用，即该变量被“provide”给他的后代组件。由此可见，@Provide的方便之处在于，开发者不需要多次在组件之间传递变量。
+后代通过使用@Consume去获取@Provide提供的变量，建立在@Provide和@Consume之间的双向数据同步，与@State/@Link不同的是，前者可以在多层级的父子组件之间传递。
+@Provide和@Consume可以通过相同的变量名或者相同的变量别名绑定，建议类型相同，否则会发生类型隐式转换，从而导致应用行为异常。
+    // 通过相同的变量名绑定
+    @Provide age: number = 0;
+    @Consume age: number;
+
+    // 通过相同的变量别名绑定
+    @Provide('a') id: number = 0;
+    @Consume('a') age: number;
+@Provide和@Consume通过相同的变量名或者相同的变量别名绑定时，@Provide装饰的变量和@Consume装饰的变量是一对多的关系。不允许在同一个自定义组件内，包括其子组件中声明多个同名或者同别名的@Provide装饰的变量，@Provide的属性名或别名需要唯一且确定，如果声明多个同名或者同别名的@Provide装饰的变量，会发生运行时报错。
+
+
+@Observed：@Observed装饰class，需要观察多层嵌套场景的class需要被@Observed装饰。单独使用@Observed没有任何作用，需要和@ObjectLink、@Prop联用。
+@ObjectLink：@ObjectLink装饰的变量接收@Observed装饰的class的实例，应用于观察多层嵌套场景，和父组件的数据源构建双向同步。
+
+Application级别的状态管理：
+AppStorage是应用程序中的一个特殊的单例LocalStorage对象，是应用级的数据库，和进程绑定，通过@StorageProp和@StorageLink装饰器可以和组件联动。
+AppStorage是应用状态的“中枢”，将需要与组件（UI）交互的数据存入AppStorage，比如持久化数据PersistentStorage和环境变量Environment。UI再通过AppStorage提供的装饰器或者API接口，访问这些数据。
+框架还提供了LocalStorage，AppStorage是LocalStorage特殊的单例。LocalStorage是应用程序声明的应用状态的内存“数据库”，通常用于页面级的状态共享，通过@LocalStorageProp和@LocalStorageLink装饰器可以和UI联动。
+
+
+@Watch装饰器：状态变量更改通知
+@Watch应用于对状态变量的监听。如果开发者需要关注某个状态变量的值是否改变，可以使用@Watch为状态变量设置回调函数。、
+    // 错误写法，编译报错
+    @State @Watch() num: number = 10;
+    @State @Watch(change) num: number = 10;
+
+    // 正确写法
+    @State @Watch('change') num: number = 10;
+    change() {
+      console.log(`xxx`);
+    }
+
+
+# 调试模拟器web
+- 开启web debug模式，设置端口9222 webview.WebviewController.setWebDebuggingAccess(true,9222);
+- 查看端口列表 hdc fport ls
+- 映射端口 hdc fport tcp:9222 tcp:9222
+- 下载微软edge 打开 edge://inspect/#devices 页面，调试
+
+读写图片视频权限，报错code:9568289，应用默认是normal权限， ohos.permission.WRITE_IMAGEVIDEO 是system_basic
+默认应用等级为normal，只能使用normal等级的权限，如果使用了system_basic或system_core等级的权限，将导致报错。
+ {
+        "name": "ohos.permission.WRITE_IMAGEVIDEO",
+        "reason": "$string:permission_WRITE_IMAGEVIDEO",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility",
+
+          ],
+          "when": "inuse"
+        }
+      },
+
+使用 querySelector 方法查询网页上的元素时，如何使用正则进行模糊匹配查询？
+这要用到元素属性值正则匹配选择器，它包括下面 3 种：
+    [attr^="val"] 前匹配
+    [attr$="val"] 后匹配
+    [attr*="val"] 任意匹配
+其中，尖角符号^、美元符号$ 以及星号*都是正则表达式中的特殊标识符，分别表示前匹配、后匹配和任意匹配。
+
+
+格式化字符串
+`${Manager.count}`
+
+上架功能：
+    追加 隐私政策 放在网站上。客户端web 浏览
+    第一次启动提示用户查看，是否同意
+
+    https://cliff.imwork.net:19999/chiphell/policies/user_agreement.html
+    https://cliff.imwork.net:19999/chiphell/policies/privacy_policy.html
+    https://cliff.imwork.net:19999/chiphell/policies/personal_information_collection_checklist.html
+
+PEM证书安装 命令行安装（开发环境）
+hdc shell aa start -a MainAbility -b com.ohos.certmanager
+
+ 最强Chiphell PCDIY 论坛客户端
+ Chiphell论坛客户端
+ 测试图片是否正常加载
+
+1. 新增图片模式功能，可帮助您更好体验
+希望通过这些更新，能让您感受到更多的惊喜与便利。
+使用过程中有任何问题或建议，欢迎随时通过论坛（请补充App内反馈体验问题的路径）与我们联系，感谢支持。

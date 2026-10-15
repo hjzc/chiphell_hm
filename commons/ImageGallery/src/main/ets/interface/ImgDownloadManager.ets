@@ -1,5 +1,5 @@
-
-import { ImgDownloadCallBack, ImgDownloader, ImgDownloadParam, ImgDownloadStatus, MgLocker } from "./ImgDownloader";
+import { ImgDownloadCallBack, ImgDownloadParam } from "./ImgDownloadCallBack";
+import { ImgDownloader, ImgDownloadStatus, MgLocker } from "./ImgDownloader";
 
 export class ImgDownloadManager{
   downloadMax:number = 1;
@@ -9,7 +9,6 @@ export class ImgDownloadManager{
   locker:MgLocker = new MgLocker();
   poolRunning :boolean =false;
   poolShouldExit :boolean =false;
-
 
   private static instance: ImgDownloadManager | undefined;
 

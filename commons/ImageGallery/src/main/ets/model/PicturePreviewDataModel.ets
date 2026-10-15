@@ -1,5 +1,6 @@
 import { FunctionData,
   IconData,
+  PictureDownloadIntercept,
   PicturePreviewData,
   PicturePreviewListener,
   StyleData, ToolBuild } from "../interface/PicturePreviewInterface";
@@ -12,6 +13,7 @@ import { collections } from "@kit.ArkTS";
 export class PicturePreviewDataModel {
   private static instance: PicturePreviewDataModel | undefined;
   private constructor() {
+
   }
   public static getInstance(): PicturePreviewDataModel {
     if (!PicturePreviewDataModel.instance) {
@@ -28,19 +30,52 @@ export class PicturePreviewDataModel {
   public static continueTimeInterval: number = 10;
 
   requestReferer: string|null=null;
-  requestUserAgent: string|null=null;
+  public static requestUserAgent: string|null=null;
   requestCookie: string|null=null;
+
+  public downloadIntercept?: PictureDownloadIntercept;
+
   //key:http domain, value: caPath
-  caMap =new collections.Map<string, string>();
+  public static caMap =new collections.Map<string, string>();
+
+  public static   updateCAPaths(domain:string, caPath:string) {
+    try {
+      PicturePreviewDataModel.caMap.set(domain, caPath);
+    } catch (error) {
+      // TODO: Implement error handling.
+      console.error('picture model updateCAPaths error: ' + JSON.stringify(error));
+    }
+  }
+
+  public static getCaPath(domain:string):string|undefined {
+    let r :string|undefined=undefined;
+    try {
+      r= PicturePreviewDataModel.caMap.get(domain);
+      if(r==undefined){
+        console.error('picture model getCaPath domain:'+domain +' is null: ');
+      }
+    } catch (error) {
+      // TODO: Implement error handling.
+      console.error('picture model getCaPath domain:'+domain +' error: ' + JSON.stringify(error));
+    }
+    return r;
+  }
+
+  public getChiphellCaPath():string|undefined {
+    return PicturePreviewDataModel.getCaPath('static.chiphell.com');
+  }
+
   // 功能参数
   functionData: FunctionData = {
     indicator: true,
     backIcon: $r('app.media.photo_gallery_public_arrow_left'),
+    saveIcon: $r('app.media.photo_gallery_public_save'),
     saveAlbum: true,
     isClickClose: true,
     isNavigationImage: true,
     continueTime: 500,
-    isBack: true
+    isBack: true,
+    isNavSave:true,
   };
   // 样式参数
   styleData: StyleData = {
@@ -88,6 +123,7 @@ export class PicturePreviewDataModel {
     this.initStyleData(picturePreviewData.styleData)
     this.initToolBuild(picturePreviewData.toolBuild)
     this.initListener(picturePreviewData.listener)
+    this.initDownloadIntercept(picturePreviewData.downloadIntercept)
   }
 
   /**
@@ -172,6 +208,7 @@ export class PicturePreviewDataModel {
       }
     }
   }
+
   /**
    * 初始化监听函数
    * @param picturePreviewData
@@ -191,5 +228,13 @@ export class PicturePreviewDataModel {
         this.listener.onClick = listener.onClick;
       }
     }
+  }
+
+  /**
+   * 初始化cache
+   * @param val
+   */
+  private initDownloadIntercept(val: PictureDownloadIntercept | undefined) {
+    this.downloadIntercept = val;
   }
 }

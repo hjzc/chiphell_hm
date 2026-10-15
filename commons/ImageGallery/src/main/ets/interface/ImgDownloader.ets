@@ -2,11 +2,13 @@
 import { fileUri } from "@kit.CoreFileKit";
 import { PicturePreviewDataModel } from "../model/PicturePreviewDataModel";
 import { http } from '@kit.NetworkKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { BusinessError, SuppressWarnings, SuppressWarningsType } from '@kit.BasicServicesKit';
 import fs from '@ohos.file.fs';
 import { hilog } from "@kit.PerformanceAnalysisKit";
 import { ArkTSUtils, taskpool } from '@kit.ArkTS';
 import { rcp } from "@kit.RemoteCommunicationKit";
+import { ImgDownloadParam } from "./ImgDownloadCallBack";
+import { PictureCacheUtil } from "../utils/PictureCacheUtil";
 
 export class MgLocker{
   private  lock_: ArkTSUtils.locks.AsyncLock = new ArkTSUtils.locks.AsyncLock();
@@ -17,6 +19,7 @@ export class MgLocker{
           run();
         }
       }catch (e) {
+        hilog.info(0x0000, 'CHIP_HELL','catch error :' + JSON.stringify(e));
       }
       return;
     }).catch(() => {
@@ -45,30 +48,6 @@ export class MgThread{
   }
 }
 
-export class ImgDownloadCallBack{
-
-  url:string|undefined;
-  filePath:string|undefined;
-  fileValid:boolean=false;
-  errorCode:number = 0;
-  private  _uriPath:string|undefined;
-
-  onStart?: (url: string) => void;
-  onFinished?: (url: string,path:string,error: boolean) => void;
-  constructor() {
-
-  }
-
-  get uriPath():string|undefined {
-    if (this._uriPath === undefined  || this._uriPath?.length<=0) {
-      if( (this.filePath !== undefined) && (this.filePath.length>0) ){
-        this._uriPath  = fileUri.getUriFromPath(this.filePath);
-      }
-    }
-    return this._uriPath;
-  }
-}
-
 class Header {
   public contentType: string;
   public referer: string;
@@ -82,12 +61,6 @@ class Header {
   }
 }
 
-export class ImgDownloadParam {
-  url:string|undefined;
-  filePath:string|undefined;
-  callBack:ImgDownloadCallBack|undefined;
-}
-
 export enum ImgDownloadStatus{
   INIT=-1,
   START =0,
@@ -98,7 +71,6 @@ export enum ImgDownloadStatus{
   WILL_END =7,
   END =9,
 }
-
 
 export class ImgDownloader {
   static defaultUserAgent : string  = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15';
@@ -130,23 +102,14 @@ export class ImgDownloader {
    //  })
   }
 
-  private getRequestCaPath(domain:string|null):string{
-    let r:string = '';
+  private getRequestCaPath(domain:string|null):string|undefined{
+    let r:string|undefined = undefined;
     let host :string|null=domain;
     if(host==null){
       host = this.getHeaderHost();
     }
     if(host!=null){
-      try {
-        if (PicturePreviewDataModel.getInstance().caMap.has(host)) {
-          let val = PicturePreviewDataModel.getInstance().caMap.get(host);
-          if (val!=null) {
-            r= val;
-          }
-        }
-      } catch (error) {
-        // TODO: Implement error handling.
-      }
+      r = PicturePreviewDataModel.getCaPath(host);
     }
     return r;
   }
@@ -199,7 +162,7 @@ export class ImgDownloader {
   }
 
   private getHeaderUserAgent():string|null{
-      return PicturePreviewDataModel.getInstance().requestUserAgent??ImgDownloader.defaultUserAgent;
+      return PicturePreviewDataModel.requestUserAgent??ImgDownloader.defaultUserAgent;
   }
   // header:{
   //   'Referer':'https://www.chiphell.com/',
@@ -222,7 +185,7 @@ export class ImgDownloader {
   //在更新证书后，可能还要加载pem证书
   private getRequestOption():http.HttpRequestOptions
   {
-    let pro1_1 = false;
+    let pro1_1 = true;
     let rf = this.getHeaderReferer();
 
    // let
@@ -238,7 +201,7 @@ export class ImgDownloader {
       'Accept': 'image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       'Accept-Encoding': 'gzip, deflate, br, zstd',
       'Accept-Language': 'zh-CN,zh;q=0.9',
-    }
+    };
    // header['referer']='https://www.chiphell.com/thread-2774083-1-1.html?mobile=2';
     header['referer']=rf;
     header['user-agent']=ua??'';
@@ -247,8 +210,24 @@ export class ImgDownloader {
     //   header['host']=host??''; // HTTP/1.1 唯一必须包含的请求头
     //   pro1_1= true;
     // }
-    ///data/storage/el1/base/haps/default/files/certs/static-chiphell-com.pem
+    /// "certificates": "/data/storage/el1/bundle/default/resources/resfile/sectigo_chain.pem"
+    // /data/storage/el1/base/haps/default/files/certs/static-chiphell-com.pem
+    // /data/storage/el1/base/haps/default/files/certs/sectigo_chain.pem
+    //let pemPath ="/data/storage/el1/bundle/default/resources/resfile/sectigo_chain.pem";
+    //let pemPath ='/data/storage/el1/bundle/default/resources/resfile/domainCaCert'; [http_exec.cpp:
     let pemPath = this.getRequestCaPath(host);
+    // try {
+    //   let pemStr = fs.readTextSync(pemPath);
+    //   if(pemStr){//http_exec.cpp:
+    //     hilog.info(0x0000, 'CHIP_HELL', `domain:${host}, pem path:${pemPath},content: \n${pemStr}`);
+    //   }else{
+    //     hilog.info(0x0000, 'CHIP_HELL', `domain:${host}, pem path:${pemPath},content: is null`);
+    //   }
+    // }catch (e) {
+    //   hilog.info(0x0000, 'CHIP_HELL','catch error :' + JSON.stringify(e));
+    // }
+
+
     //HTTP/1.1引入了持久连接的概念
     // 1）客户端发送一个请求到服务器，并在请求头中包含Connection: keep-alive字段，表示希望保持连接。
     // （2）服务器接收到请求后，发送相应的响应给客户端，并在响应头中也包含Connection: keep-alive字段，表示服务器同意保持连接。
@@ -257,13 +236,16 @@ export class ImgDownloader {
    // header['Connection']= 'keep-alive';
 
     if (this.param.url?.startsWith('https',0)) {
-      //header['sec-ch-ua-platform']='Unknown';
-      //header['sec-ch-ua']='Not A(Brand";v="8", "Chromium";v="132';
-      //header['sec-ch-ua-mobile']='?0';
+      header['sec-ch-ua-platform']='Unknown';
+      header['sec-ch-ua']='Not A(Brand";v="8", "Chromium";v="132"';
+      header['sec-ch-ua-mobile']='?0';
+      header['priority']='i';
+
       header['sec-fetch-site']='same-site';
-      header['sec-ch-ua-dest']='image';
-      header['Sec-Fetch-Mode']='no-cors';
-      header['priority']=' u=3, i';
+      header['sec-fetch-dest']='image';
+      header['sec-fetch-mode']='no-cors';
+      //header['priority']=' u=1, i';
+     // header['priority']=' u=3, i';
     }
     let op : http.HttpRequestOptions =  {
       method: http.RequestMethod.GET,
@@ -272,9 +254,10 @@ export class ImgDownloader {
       maxLimit: 100 * 1024 * 1024,
       usingCache:false,
       header:header,
-   //   remoteValidation: 'system',
+      //remoteValidation: 'system',
      // remoteValidation: 'skip', // 关键配置：跳过证书验证,因为chip hell的static
-    //  usingProtocol:pro1_1?http.HttpProtocol.HTTP1_1 : http.HttpProtocol.HTTP2,
+      //usingProtocol可能无效。一个系统bug，会自动协商到http3,导致被拦截
+      usingProtocol:pro1_1?http.HttpProtocol.HTTP1_1 : http.HttpProtocol.HTTP2,
 
       //在HTTP/1.1中，每个请求都可以带有一个优先级（priority）信息，用于指示请求的重要性或紧急程度。
       //请求头部添加Priority字段来指定。该字段的值可以是urgency（紧急）或immediacy（即时）
@@ -284,13 +267,13 @@ export class ImgDownloader {
       //priority:1,
 
     //  usingProxy: false, // 可选，默认不使用网络代理，自API 10开始支持该属性
-      //浏览器打开，到处pem证书，加载
-      caPath: pemPath??"",
-      //caPath:'entry/src/main/resources/rawfile/static-chiphell-com.pem',
-    //  caPath:'/data/storage/el1/bundle/entry/resources/resfile/static-chiphell-com.pem',
+      //浏览器打开，到处pem证书，加载 /data/storage/el1/base/haps/default/files/certs/static-chiphell-com.pem
+      caPath:  pemPath,
+    //  caPath:'/data/storage/el1/bundle/default/resources/resfile/sectigo_chain.pem',
+
      // extraData: { isRedirect: false },
       //expectDataType: http.HttpDataType.ARRAY_BUFFER,
-    }
+    };
 
     return op;
   }
@@ -334,53 +317,12 @@ export class ImgDownloader {
     return this.request != null || this.steamRequest!=null;
   }
 
-  private writeBufferToFile(buffer :ArrayBuffer):boolean
-  {
-    let r:boolean  =false;
-    try {
-      // 打开并创建文件目录
-      let we:boolean = true;
-      let file = fs.openSync(this.param.filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-      fs.write(file.fd, buffer).catch(() => {
-        // TODO: Implement error handling.
-        we =false;
-      });
-      fs.close(file.fd).catch(() => {
-        // TODO: Implement error handling.
-        we=false;
-      });
-      r = we;
-    }catch (e ){
-      let err : BusinessError = e as BusinessError;
-      hilog.info(0x0000, 'CHIP_HELL', `writeBufferToFile error code: ${err.code}, message:${err.message}`);
-    }
-    return r;
+  private writeBufferToFile(buffer :ArrayBuffer):boolean {
+    return PictureCacheUtil.writeBufferToFile(this.param.filePath,buffer);
   }
 
-  startRcp():void{
-    let securityConfig: rcp.SecurityConfiguration = {
-      remoteValidation: 'skip'  // 显式跳过SSL验证
-    };
-    try {
-      const session = rcp.createSession({
-        requestConfiguration: { security: securityConfig }
-      });
-      // 发起HTTPS请求
-      session.get(this.param.url)
-        .then((response: rcp.Response) => {
-          // 处理响应数据
-          //this.status = ImgDownloadStatus.WILL_END;
-          //this.downloadEnd();
-          hilog.info(0x0000, 'CHIP_HELL', ` rcp response statusCode: ${response.statusCode}`);
-
-        });
-    } catch (error) {
-      // TODO: Implement error handling.
-    }
-
-  }
-
-  start():void {
+  @SuppressWarnings({ rules: [SuppressWarningsType.PERMISSION] })
+  start(): void {
     if (this.isDownloading()) {
       return;
     }
@@ -388,22 +330,15 @@ export class ImgDownloader {
     //import http from '@ohos.net.http';
     this.param.callBack!.fileValid = false;
     this.request = http.createHttp();
-    // let options:http.HttpRequestOptions = {
-    //   method: http.RequestMethod.GET,
-    //   remoteValidation: 'skip', // 关键配置：跳过证书验证
-    // };
-
-    this.request.on('headersReceive', (header )  => {
+    this.request.on('headersReceive', (header) => {
       // let rc :Record<string, string | number> = header as  Record<string, string | number>;
       // const finalUrl = rc['Location'];
-      hilog.info(0x0000, 'CHIP_HELL:','header: ' + JSON.stringify(header));
+      hilog.info(0x0000, 'CHIP_HELL:', 'header: ' + JSON.stringify(header));
     });
     this.downloadStart();
-
     this.request.request(this.param.url, this.getRequestOption(),
-
       async (err: BusinessError, data: http.HttpResponse) => {
-        let isSteamRetry =  err && (err.code == 2300023);
+        let isSteamRetry = err && (err.code == 2300023);
         if (err) {
           if (isSteamRetry) {
             //大于100MB需要流下载方式
@@ -417,49 +352,48 @@ export class ImgDownloader {
             this.status = ImgDownloadStatus.ERROR_HANDLE;
             this.param.callBack!.errorCode = err.code;
           }
-        } else if(data){
-          hilog.info(0x0000, 'CHIP_HELL',`CHIP_HELL data. resultType:${data.resultType},responseCode: ${data.responseCode} `);
+        } else if (data) {
+          hilog.info(0x0000, 'CHIP_HELL',
+            `CHIP_HELL data. resultType:${data.resultType},responseCode: ${data.responseCode} `);
           this.status = ImgDownloadStatus.HANDLE;
-          if (this.onlyImg  ) {
-            if ( data.resultType == http.HttpDataType.ARRAY_BUFFER ){
-              if (data.responseCode== 200) {
-                this.param.callBack!.errorCode =0;
+          if (this.onlyImg) {
+            if (data.resultType == http.HttpDataType.ARRAY_BUFFER) {
+              if (data.responseCode == 200) {
+                this.param.callBack!.errorCode = 0;
                 this.param.callBack!.fileValid = this.writeBufferToFile(data.result as ArrayBuffer);
+                // 文件保存成功 /data/storage/el2/base/haps/default/files/MediaLibrary_Image/081136j54da155qdicrat1.jpg
                 hilog.info(0x0000, 'CHIP_HELL', "downloadPathByUrl 文件保存成功 " + this.param.filePath);
-              }else{
+              } else {
                 this.param.callBack!.errorCode = -3;
-                this.param.callBack!.fileValid=false;
+                this.param.callBack!.fileValid = false;
               }
-            }
-            else{
-              this.param.callBack!.errorCode = data.responseCode==200? -4: -1;
-              this.param.callBack!.fileValid=false;
-              if (data.resultType == http.HttpDataType.OBJECT ) {
+            } else {
+              this.param.callBack!.errorCode = data.responseCode == 200 ? -4 : -1;
+              this.param.callBack!.fileValid = false;
+              if (data.resultType == http.HttpDataType.OBJECT) {
                 hilog.info(0x0000, 'CHIP_HELL', `CHIP_HELL data. resultType 1 object 无效格式 `);
               } else if (data.resultType == http.HttpDataType.STRING) {
                 hilog.info(0x0000, 'CHIP_HELL', `CHIP_HELL data. resultType 0 string : ${data.result} `);
               } else {
-                hilog.info(0x0000, 'CHIP_HELL',`CHIP_HELL data. resultType ${data.resultType} other 无效格式`);
+                hilog.info(0x0000, 'CHIP_HELL', `CHIP_HELL data. resultType ${data.resultType} other 无效格式`);
               }
             }
-          }
-          else {
+          } else {
             this.param.callBack!.errorCode = 0;
             this.param.callBack!.fileValid = this.writeBufferToFile(data.result as ArrayBuffer);
-            hilog.info(0x0000, 'CHIP_HELL',`CHIP_HELL download data end`);
+            hilog.info(0x0000, 'CHIP_HELL', `CHIP_HELL download data end`);
           }
-        }else{
+        } else {
           this.param.callBack!.errorCode = -2;
-          this.param.callBack!.fileValid =false;
-          hilog.info(0x0000, 'CHIP_HELL',`CHIP_HELL download data. is null`);
+          this.param.callBack!.fileValid = false;
+          hilog.info(0x0000, 'CHIP_HELL', `CHIP_HELL download data. is null`);
         }
         this.destroy();
         this.status = ImgDownloadStatus.WILL_END;
         this.downloadEnd();
-     //   this.startRcp();
+        //this.startRcp();
       });
   }
-
 
   private startSteamRequest():void{
     if (this.isDownloading()) {
@@ -539,8 +473,7 @@ export class ImgDownloader {
     });
   }
 
-  private downloadStart()
-  {
+  private downloadStart() {
     if(this.param.callBack !== undefined  && (this.param.callBack.onStart !== undefined )){
       this.param.callBack.onStart(this.param.url!);
     }
@@ -548,7 +481,7 @@ export class ImgDownloader {
       const element = this.sameList[i];
       element.callBack!.errorCode = this.param.callBack!.errorCode;
       element.callBack!.fileValid = this.param.callBack!.fileValid;
-      element.callBack!.errorCode = this.param.callBack!.errorCode;
+     // element.callBack!.errorCode = this.param.callBack!.errorCode;
       if(element.callBack !== undefined  && (element.callBack.onStart !== undefined )){
         element.callBack.onStart(element.url!);
       }
@@ -568,7 +501,7 @@ export class ImgDownloader {
         const element = this.sameList[i];
         element.callBack!.errorCode = this.param.callBack!.errorCode;
         element.callBack!.fileValid = this.param.callBack!.fileValid;
-        element.callBack!.errorCode = this.param.callBack!.errorCode;
+       // element.callBack!.errorCode = this.param.callBack!.errorCode;
         if(element.callBack !== undefined  && (element.callBack.onFinished !== undefined )){
           element.callBack.onFinished(element.url!,element.callBack.uriPath! ,element.callBack.errorCode !=0);
         }
@@ -579,26 +512,33 @@ export class ImgDownloader {
     });
   }
 
-  private async isImageByContent(filePath: string): Promise<boolean> {
-    let r:boolean = false;
-    try {
-      let file = await fs.open(filePath, fs.OpenMode.READ_ONLY);
-      let buffer = new ArrayBuffer(8); // 读取前8字节
-      await fs.read(file.fd, buffer);
-      const view = new Uint8Array(buffer);
-      await fs.close(file.fd);
-      if(view[0] == 0xFF && view[1] == 0xD8 ){
-        r= true;
-      }else if(view[0] == 0x47  && view[1] == 0x49  && view[2] == 0x46  ){
-        r= true;
-      }else if(view[0] == 0x89 && view[1] == 0x50 && view[2] == 0x4E && view[3] == 0x47 ){
-        r= true;
-      }
-      return r;
-    } catch (e) {
-      return false;
-    }
-  }
+
+
+
+  // startRcp():void{
+  //   let securityConfig: rcp.SecurityConfiguration = {
+  //     remoteValidation: 'skip'  // 显式跳过SSL验证
+  //   };
+  //   try {
+  //     const session = rcp.createSession({
+  //       requestConfiguration: { security: securityConfig }
+  //     });
+  //     // 发起HTTPS请求
+  //     session.get(this.param.url)
+  //       .then((response: rcp.Response) => {
+  //         // 处理响应数据
+  //         //this.status = ImgDownloadStatus.WILL_END;
+  //         //this.downloadEnd();
+  //         hilog.info(0x0000, 'CHIP_HELL', ` rcp response statusCode: ${response.statusCode}`);
+  //
+  //       });
+  //   } catch (error) {
+  //     // TODO: Implement error handling.
+  //   }
+  // }
+
+
+
 }
 
 

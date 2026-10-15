@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/harmony-dialog
+ * Copyright (C) 2024 Zorro @pura/harmony-dialog
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -55,7 +55,7 @@ import { Helper } from '../utils/Helper';
 
 /**
  * TODO Dialog帮助工具类（全局自定义弹框，不依赖UI组件）
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/01
  */
 export class DialogHelper {

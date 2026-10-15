@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 桃花镇童长老 @pura/spinkit
+ * Copyright (C) 2024 Zorro @pura/spinkit
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -42,7 +42,7 @@ import { SpinX } from './SpinX';
 
 /**
  * TODO SpinKit动画组件
- * author: 桃花镇童长老
+ * author: Zorro
  * since: 2024/05/01
  */
 @ComponentV2

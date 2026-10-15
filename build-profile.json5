@@ -5,31 +5,31 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/cp.p12",
-          "storePassword": "0000001BA0178C1DD7153C83DCF846FD907988D8AA6C534168B4447E8529829B4BBD1E054019D8B3910215",
+          "storeFile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/debug/cp.p12",
+          "storePassword": "0000001BD6B27C4CD9B589078F108DCCD277980C06ABC53CD245E2B5C4376563C370DCCB84B39A21A0A026",
           "keyAlias": "cp",
-          "keyPassword": "0000001B6676AFA97D4B7F01ECB4A0087A6FFB735940D9E06DE40DFFEF31A77EFD5FAF1A95BF6A837D1F34",
+          "keyPassword": "0000001B43F24B2DD590CDECD84E889A4A049348300CB1D9A5A6660A6E523E0C4BD97584DFE67FB73214AD",
           "signAlg": "SHA256withECDSA",
-          "profile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/cpDebug.p7b",
-          "certpath": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/cp.cer"
+          "profile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/debug/cp2Debug.p7b",
+          "certpath": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/debug/cp2.cer"
         }
       }
     ],
-//    "signingConfigs": [
-//      {
-//        "name": "default",
-//        "type": "HarmonyOS",
-//        "material": {
-//          "certpath": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cpr.cer",
-//          "keyAlias": "cpr",
-//          "keyPassword": "0000001BD052B664197E6F97B7BE686FD00AC23936E1EFDEF084EAD5A694EDCF7173583472B834CF7125BD",
-//          "profile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cprRelease.p7b",
-//          "signAlg": "SHA256withECDSA",
-//          "storeFile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cpr.p12",
-//          "storePassword": "0000001B3215FFDF0600E623A0BFDC608310EFD474BE00D3F7DAA6FD886A7241204FEA3C3535E2DD940C92"
-//        }
-//      }
-//    ],
+    //    "signingConfigs": [
+    //      {
+    //        "name": "default",
+    //        "type": "HarmonyOS",
+    //        "material": {
+    //          "certpath": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cpr.cer",
+    //          "keyAlias": "cpr",
+    //          "keyPassword": "0000001BD052B664197E6F97B7BE686FD00AC23936E1EFDEF084EAD5A694EDCF7173583472B834CF7125BD",
+    //          "profile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cprRelease.p7b",
+    //          "signAlg": "SHA256withECDSA",
+    //          "storeFile": "/Users/zorro/Documents/Dev/huawei/Zorro/chiphell_hm/Doc/certificate/release/cpr.p12",
+    //          "storePassword": "0000001B3215FFDF0600E623A0BFDC608310EFD474BE00D3F7DAA6FD886A7241204FEA3C3535E2DD940C92"
+    //        }
+    //      }
+    //    ],
     "products": [
       {
         "name": "default",
@@ -66,18 +66,6 @@
           ],
         }
       ]
-    },
-    {
-      "name": "quickstart",
-      "srcPath": "./features/quickstart",
-    },
-    {
-      "name": "map",
-      "srcPath": "./features/map",
-    },
-    {
-      "name": "learning",
-      "srcPath": "./features/learning",
     },
     {
       "name": "utils",

@@ -9,7 +9,7 @@ import { Helper } from '../utils/Helper';
 
 /**
  * TODO 弹窗工具类，默认样式参数
- * author: 桃花镇童长老ᥫ᭡
+ * author: Zorro
  * since: 2024/08/18
  */
 export class DialogConfig {
